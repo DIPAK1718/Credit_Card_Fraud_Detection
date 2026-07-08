@@ -1,0 +1,103 @@
+Interview Question 1
+Why are features named V1 to V28 instead of actual names?
+Answer
+The original transaction features were transformed using Principal Component Analysis (PCA) to protect customer privacy and confidentiality. Therefore, most original feature names are hidden and represented as V1–V28.
+Only Time and Amount remain in their original form.
+
+Interview Question 2
+Can we interpret V1 or V5?
+Answer
+No.
+Since these are PCA components, they are combinations of the original variables. We know they contain useful information, but we cannot directly interpret them as "Age", "Income", etc.
+
+Interview Question 3
+Should we perform One-Hot Encoding?
+Answer
+No.
+All features are already numerical.
+
+why stratify=y ?
+We use stratify=y to preserve the original class distribution in both the training and testing datasets. This is especially important for highly imbalanced classification problems like fraud detection.
+
+Standardize Only Time and Amount
+Notice ki V1–V28 pehle se PCA ke baad standardized hain. Unhe dobara scale karna zaroori nahi.
+
+by default Training testing
+75% → Training Data
+25% → Testing Data
+
+Why do we usually use test_size=0.2? Why not 0.5 or 0.1?
+Answer
+There is no universal rule. It depends on the dataset size.
+Large datasets (100k+ rows): 80:20 is common because even 20% gives plenty of test samples.
+Medium datasets (5k–50k): 80:20 or 75:25 are common.
+Very small datasets (<1000 rows): Instead of relying on one split, Cross Validation is preferred.
+
+Why isn't 99.92% Accuracy impressive?
+Interview Answer
+The dataset is extremely imbalanced. Around 99.83% of transactions are genuine, so a model can achieve very high accuracy even if it fails to detect many fraudulent transactions. Therefore, Precision, Recall, F1-score, and ROC-AUC are more appropriate evaluation metrics.
+
+Why did Accuracy decrease?
+Answer:
+Accuracy kam hui kyunki model ne fraud pakadne ke chakkar me bahut saare genuine transactions ko bhi fraud classify kar diya (False Positives badh gaye). Accuracy overall predictions dekhti hai, isliye FP badhne se accuracy gir gayi.
+
+Interview Questions
+Q1. Why do we apply SMOTE only on the training set?
+Answer:
+SMOTE should be applied only to the training data because the test set must represent real-world data. Applying SMOTE to the test set would introduce synthetic samples, causing data leakage and giving an unrealistic evaluation.
+
+Q2. Why not use SMOTE before train-test split?
+Answer:
+If SMOTE is applied before splitting, synthetic samples generated from the entire dataset may leak information into the test set. This leads to overly optimistic performance estimates and invalid model evaluation.
+
+Interview Question 1
+Did SMOTE improve the model?
+Answer:
+No. SMOTE balanced the training data, but it did not improve Recall compared to class_weight='balanced'. It also slightly reduced Precision and Accuracy due to more False Positives.
+
+Interview Question 2
+Should we always use SMOTE for imbalanced datasets?
+Answer:
+No. SMOTE is not guaranteed to improve performance. It should be evaluated experimentally. Some algorithms, such as Logistic Regression with class_weight='balanced', may perform equally well or even better without generating synthetic samples.
+
+Interview Question 3 (Frequently Asked)
+When would you prefer class_weight over SMOTE?
+Answer:
+I would first establish a baseline model. If class imbalance affects Recall, I would try class_weight='balanced' because it is simple, computationally efficient, and avoids creating synthetic data. I would consider SMOTE only if class weighting does not provide satisfactory performance.
+
+Q. Random Forest generally doesn't require feature scaling. We still scaled Time and Amount. Why?
+Random Forest itself does not require feature scaling because it makes decisions based on feature splits rather than distances. However, in this project we had already scaled Time and Amount while building the Logistic Regression baseline. We kept the same preprocessed dataset for a fair comparison between models and to avoid maintaining separate preprocessing pipelines.
+
+Which model would you deploy?
+Answer (Interview Level):
+I would deploy the Random Forest model because it provides the best overall trade-off. It achieves high Precision (94.1%), meaning very few genuine transactions are incorrectly flagged as fraud, while also maintaining a strong Recall (81.6%), allowing it to detect most fraudulent transactions. Its F1-score is the highest among all evaluated models, indicating the best balance between Precision and Recall.
+
+Why didn't you deploy the Balanced Logistic Regression?
+Answer:
+Although Balanced Logistic Regression achieved very high Recall (91.8%), its Precision was only about 6%. This means it incorrectly flagged a large number of legitimate transactions as fraud, which would create unnecessary customer inconvenience and operational costs.
+
+Would you choose Recall over Precision in every fraud detection problem?
+Answer:
+No. The choice depends on business requirements. If missing a fraud is extremely costly, Recall should be prioritized. If falsely blocking genuine customers is also expensive, a balance between Precision and Recall is preferred. In practice, the decision threshold is often adjusted based on business objectives.
+
+nterview Questions
+Q1. Why didn't RandomizedSearchCV improve the model?
+Answer:
+The baseline Random Forest was already close to the optimal hyperparameters. RandomizedSearchCV selected parameters very similar to the defaults, so there was little room for improvement.
+
+Q2. What is ROC-AUC?
+Answer:
+ROC-AUC measures a model's ability to distinguish between positive and negative classes across all classification thresholds. A higher AUC indicates better separability.
+
+Q3. Why ROC-AUC instead of Accuracy?
+Answer:
+Because the dataset is highly imbalanced. Accuracy can be misleading, whereas ROC-AUC evaluates how well the model separates fraud and genuine transactions regardless of the classification threshold.
+
+Q4. What would you improve if given more time?
+Good interview answer:
+Threshold tuning
+XGBoost / LightGBM
+Feature engineering
+Cost-sensitive learning
+Cross-validation with stratification
+Probability calibration
