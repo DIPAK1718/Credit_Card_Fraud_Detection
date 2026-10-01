@@ -18,7 +18,7 @@ This project focuses on detecting fraudulent credit card transactions using Mach
 ---
 
 ## Project Workflow
-
+ 
 - Data Loading
 - Data Exploration
 - Missing Value Check
