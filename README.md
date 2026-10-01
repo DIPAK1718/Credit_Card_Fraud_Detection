@@ -5,7 +5,7 @@
 This project focuses on detecting fraudulent credit card transactions using Machine Learning. Since fraud cases are extremely rare compared to genuine transactions, the dataset is highly imbalanced. Different techniques such as Logistic Regression, Class Weighting, SMOTE, and Random Forest were implemented and compared to identify the most effective model.
 
 ---
-
+ 
 ## Dataset
  
 - Source: Kaggle Credit Card Fraud Detection Dataset
