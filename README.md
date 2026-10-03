@@ -15,7 +15,7 @@ This project focuses on detecting fraudulent credit card transactions using Mach
   - 0 = Genuine Transaction
   - 1 = Fraudulent Transaction
  
----
+--- 
 
 ## Project Workflow
  
